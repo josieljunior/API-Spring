@@ -1,7 +1,10 @@
 package com.api.test.modelo;
 
-public class Curso {
+import javax.persistence.*;
 
+@Entity
+public class Curso {
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String categoria;
