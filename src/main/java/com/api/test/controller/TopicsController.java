@@ -1,5 +1,6 @@
 package com.api.test.controller;
 
+import com.api.test.dto.DetalhesTopicoDto;
 import com.api.test.form.TopicoForm;
 import com.api.test.dto.TopicoDto;
 import com.api.test.modelo.Topico;
@@ -40,6 +41,13 @@ public class TopicsController {
 
         URI uri = uriBuilder.path("/topics/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(uri).body(new TopicoDto(topico));
+    }
+
+    @GetMapping("/{id}")
+    public DetalhesTopicoDto detalhar(@PathVariable Long id) {
+        Topico topico = topicoRepository.getById(id);
+        return new DetalhesTopicoDto(topico);
+
     }
 }
 
