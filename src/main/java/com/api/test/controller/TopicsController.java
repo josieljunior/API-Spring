@@ -8,6 +8,9 @@ import com.api.test.modelo.Topico;
 import com.api.test.repository.CursoRepository;
 import com.api.test.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/topics")
+@RequestMapping("/topicos")
 public class TopicsController {
     @Autowired
     private TopicoRepository topicoRepository;
@@ -27,12 +30,18 @@ public class TopicsController {
     private CursoRepository cursoRepository;
 
     @GetMapping
-    public List<TopicoDto> lista(String nomeCurso) {
+    public Page<TopicoDto> lista(
+            @RequestParam(required = false) String nomeCurso,
+            @RequestParam int pagina,
+            @RequestParam int qtd) {
+
+        Pageable paginacao = PageRequest.of(pagina, qtd);
+
         if (nomeCurso == null){
-            List<Topico> topicos = topicoRepository.findAll();
+            Page<Topico> topicos = topicoRepository.findAll(paginacao);
             return TopicoDto.converter(topicos);
         }else {
-            List<Topico> topicos = topicoRepository.findByCurso_Nome(nomeCurso);
+            Page<Topico> topicos = topicoRepository.findByCurso_Nome(nomeCurso, paginacao);
             return TopicoDto.converter(topicos);
         }
     }
