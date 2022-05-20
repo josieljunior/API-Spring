@@ -1,6 +1,7 @@
 package com.api.test.controller;
 
 import com.api.test.config.security.TokenService;
+import com.api.test.dto.TokenDto;
 import com.api.test.form.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,17 +27,17 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<?> autenticar(@RequestBody @Valid LoginForm form){
+    public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form){
         UsernamePasswordAuthenticationToken dadosLogin = form.converter();
 
         try {
             Authentication authentication =  authManager.authenticate(dadosLogin);
             String token = tokenService.gerartoken(authentication);
-            System.out.println(token);
+            return ResponseEntity.ok(new TokenDto(token, "Bearer"));
+
         }catch (AuthenticationException e){
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().build();
     }
 }
