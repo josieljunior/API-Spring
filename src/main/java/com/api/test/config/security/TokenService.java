@@ -1,6 +1,7 @@
 package com.api.test.config.security;
 
 import com.api.test.modelo.Usuario;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,15 @@ public class TokenService {
     @Value("${test.jwt.secret}")
     private String secret;
 
+    public boolean isTokenValido(String token) {
+        try {
+            Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     public String gerartoken(Authentication authentication){
         Usuario logado = (Usuario) authentication.getPrincipal();
         Date hoje = new Date();
@@ -31,5 +41,10 @@ public class TokenService {
                 .setExpiration(dataExpiracao)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
+    }
+
+    public Long getIdUsuario(String token) {
+        Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+        return Long.parseLong(claims.getSubject());
     }
 }
