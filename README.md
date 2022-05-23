@@ -28,5 +28,5 @@ docker build -t api-test-spring .
 \
 Em seguida criar o container com as configurações necessárias:
 ```
-docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE='PROD' -e FORUM_DATABASE_URL='jdbc:h2:mem:forum' -e FORUM_DATABASE_USERNAME='SA' -e FORUM_DATABASE_PASSWORD='' -e FORUM_JWT_SECRET='aquivaiachave' api-test-spring
+docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE='prod' -e FORUM_DATABASE_URL='jdbc:h2:mem:forum' -e FORUM_DATABASE_USERNAME='sa' -e FORUM_DATABASE_PASSWORD='' -e FORUM_JWT_SECRET='aquivaiachave' api-test-spring
 ```
